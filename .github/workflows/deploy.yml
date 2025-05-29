@@ -36,7 +36,7 @@ jobs:
         source: "."
         target: ${{ secrets.DEPLOY_DIR }}
         strip_components: 0
-        rm: true
+        rm: false
         overwrite: true
 
 
