@@ -18,13 +18,19 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      run:  npm ci
+      run: npm ci
 
     - name: Build Next.js app
-      run:  npm run build
+      run: npm run build
 
-    - name: Debug - list files
-      run: ls -Rla
+    - name: Prepare deployment package
+      run: |
+        mkdir deploy
+        cp -r .next public package.json ecosystem.config.js deploy/
+        cp -r node_modules deploy/node_modules
+
+    - name: Debug - List deploy files
+      run: ls -Rla deploy
 
     - name: Copy files to Skytap VM
       uses: appleboy/scp-action@v0.1.7
@@ -33,13 +39,11 @@ jobs:
         username: ${{ secrets.VM_USER }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.VM_PORT }}
-        source: "."
+        source: "deploy/*"
         target: ${{ secrets.DEPLOY_DIR }}
         strip_components: 0
         rm: false
         overwrite: true
-        scp_ignore: ".scpignore"
-
 
     - name: SSH and Restart PM2
       uses: appleboy/ssh-action@v1.0.0
@@ -50,6 +54,5 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
           cd ${{ secrets.DEPLOY_DIR }}
-          npm install --omit=dev
           pm2 delete testing_project || true
           pm2 start ecosystem.config.js
