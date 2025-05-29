@@ -23,18 +23,22 @@ jobs:
     - name: Build Next.js app
       run:  npm run build
 
+    - name: Debug - list files
+      run: ls -Rla
+
     - name: Copy files to Skytap VM
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VM_HOST }}
         username: ${{ secrets.VM_USER }}
-        port: ${{ secrets.VM_PORT }}
         key: ${{ secrets.PRIVATE_KEY }}
-        source: ".next public package.json ecosystem.config.js"
+        port: ${{ secrets.VM_PORT }}
+        source: "./.next ./public ./package.json ./ecosystem.config.js"
         target: ${{ secrets.DEPLOY_DIR }}
         strip_components: 0
         rm: true
         overwrite: true
+
 
     - name: SSH and Restart PM2
       uses: appleboy/ssh-action@v1.0.0
