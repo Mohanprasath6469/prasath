@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.VM_USER }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.VM_PORT }}
-        source: "./.next ./public ./package.json ./ecosystem.config.js"
+        source: "."
         target: ${{ secrets.DEPLOY_DIR }}
         strip_components: 0
         rm: true
