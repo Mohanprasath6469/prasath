@@ -1,5 +1,5 @@
 export default function FirstPage(){
   return(
-    <div>************covai*************</div>
+    <div>************Mannai*************</div>
   )
 }
