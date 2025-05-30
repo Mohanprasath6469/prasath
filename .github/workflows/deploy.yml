@@ -31,12 +31,15 @@ jobs:
     - name: Create deployment archive
       run: |
         tar -czf deploy.tar.gz \
+          --exclude=node_modules/.cache \
+          --exclude=.git \
+          --exclude=.github \
+          --exclude=*.log \
           .next \
           package.json \
           package-lock.json \
           node_modules \
-          public \
-          --exclude=node_modules/.cache
+          public
 
     - name: Setup SSH key
       run: |
