@@ -1,5 +1,5 @@
 export default function FirstPage(){
   return(
-    <div>************covai team*************</div>
+    <div>Team Fulcrum ALM Solutions, Coimbatore.</div>
   )
 }
