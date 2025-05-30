@@ -70,7 +70,7 @@ jobs:
           if [ -f ecosystem.config.js ]; then
             pm2 startOrRestart ecosystem.config.js
           else
-            pm2 start npm --name "my-app" -- start
+            pm2 start npm --name "ePoll-Audit" -- start
           fi
           
           # Save PM2 configuration
