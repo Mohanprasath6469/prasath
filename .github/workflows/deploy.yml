@@ -39,7 +39,8 @@ jobs:
           package.json \
           package-lock.json \
           node_modules \
-          public
+          public \
+          ecosystem.config.js
 
     - name: Setup SSH key
       run: |
