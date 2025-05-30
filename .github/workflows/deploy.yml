@@ -3,11 +3,14 @@ name: Deploy to VM
 on:
   push:
     branches: [ main, master ]  # Adjust branch names as needed
-
+  pull_request:
+    branches: [ main, master ]
+    types: [ closed ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
     
     steps:
     - name: Checkout code
@@ -16,7 +19,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'  # Adjust version as needed
+        node-version: '18'  # Adjust version as needed
         cache: 'npm'
 
     - name: Install dependencies
@@ -41,17 +44,10 @@ jobs:
         echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -p ${{ secrets.VM_PORT }} ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
-									
-						  
-										 
-		 
-	 
-					   
 
     - name: Deploy to VM
       run: |
         # Create deployment directory if it doesn't exist
-		   
         ssh -i ~/.ssh/id_rsa -p ${{ secrets.VM_PORT }} ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "mkdir -p ${{ secrets.DEPLOY_DIR }}"
         
         # Copy the deployment archive
@@ -59,8 +55,6 @@ jobs:
         
         # Extract and setup on VM
         ssh -i ~/.ssh/id_rsa -p ${{ secrets.VM_PORT }} ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
-									   
-				 
           cd ${{ secrets.DEPLOY_DIR }}
           
           # Stop the current application (if running)
