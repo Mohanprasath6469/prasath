@@ -2,15 +2,11 @@ name: Deploy to VM
 
 on:
   push:
-    branches: [ main, master ]  # Adjust branch names as needed
-  pull_request:
-    branches: [ main, master ]
-    types: [ closed ]
+    branches: [ main, master ]  # Only trigger on direct pushes to main/master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
     
     steps:
     - name: Checkout code
